@@ -25,7 +25,7 @@ import org.edx.mobile.model.course.CourseComponent
 import org.edx.mobile.module.analytics.Analytics
 import org.edx.mobile.util.BrowserUtil
 import org.edx.mobile.util.CourseDateUtil
-import org.edx.mobile.util.UiUtil
+import org.edx.mobile.util.UiUtils
 import org.edx.mobile.view.adapters.CourseDatesAdapter
 import org.edx.mobile.view.dialog.AlertDialogFragment
 import org.edx.mobile.viewModel.CourseDateViewModel
@@ -100,7 +100,7 @@ class CourseDatesPageFragment : OfflineSupportBaseFragment() {
             errorNotification.hideError()
             viewModel.fetchCourseDates(courseID = courseData.courseId, isSwipeRefresh = true)
         }
-        UiUtil.setSwipeRefreshLayoutColors(binding.swipeContainer)
+        UiUtils.setSwipeRefreshLayoutColors(binding.swipeContainer)
         initObserver()
     }
 

@@ -76,7 +76,7 @@ import org.edx.mobile.util.BrowserUtil;
 import org.edx.mobile.util.ConfigUtil;
 import org.edx.mobile.util.CourseDateUtil;
 import org.edx.mobile.util.PermissionsUtil;
-import org.edx.mobile.util.UiUtil;
+import org.edx.mobile.util.UiUtils;
 import org.edx.mobile.view.adapters.CourseOutlineAdapter;
 import org.edx.mobile.view.common.TaskProgressCallback;
 import org.edx.mobile.viewModel.CourseDateViewModel;
@@ -176,7 +176,7 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
                 getCourseComponentFromServer(false);
             }
         });
-        UiUtil.setSwipeRefreshLayoutColors(swipeContainer);
+        UiUtils.INSTANCE.setSwipeRefreshLayoutColors(swipeContainer);
         restore(bundle);
         initListView(view);
         initObserver();
@@ -342,7 +342,7 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
                 }
                 swipeContainer.setRefreshing(false);
                 // Remove bulk video download if the course has NO downloadable videos
-                UiUtil.removeFragmentByTag(CourseOutlineFragment.this, "bulk_download");
+                UiUtils.INSTANCE.removeFragmentByTag(CourseOutlineFragment.this, "bulk_download");
             }
 
             @Override
@@ -412,7 +412,7 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
                     return false;
                 }
                 final AppCompatImageView bulkDownloadIcon = (AppCompatImageView) view.findViewById(R.id.bulk_download);
-                if (bulkDownloadIcon != null && (Integer) bulkDownloadIcon.getTag() == R.drawable.ic_check) {
+                if (bulkDownloadIcon != null && (Integer) bulkDownloadIcon.getTag() == R.drawable.ic_download_done) {
                     ((AppCompatActivity) getActivity()).startSupportActionMode(deleteModelCallback);
                     listView.setItemChecked(position, true);
                     return true;
@@ -531,8 +531,7 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
             final MenuInflater inflater = mode.getMenuInflater();
             inflater.inflate(R.menu.delete_contextual_menu, menu);
             menu.findItem(R.id.item_delete).setIcon(
-                    UiUtil.getDrawable(getContext(), R.drawable.ic_delete,
-                            R.dimen.action_bar_icon_size,R.color.white)
+                    UiUtils.INSTANCE.getDrawable(getContext(), R.drawable.ic_delete, R.dimen.action_bar_icon_size)
             );
             mode.setTitle(R.string.delete_videos_title);
             return true;
@@ -557,7 +556,7 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
                     if (rowView != null) {
                         // rowView will be null, if the user scrolls away from the checked item
                         ((AppCompatImageView) rowView.findViewById(R.id.bulk_download)).setImageDrawable(
-                                UiUtil.getDrawable(requireContext(), R.drawable.ic_download));
+                                UiUtils.INSTANCE.getDrawable(requireContext(), R.drawable.ic_download));
                     }
 
                     final CourseOutlineAdapter.SectionRow rowItem = adapter.getItem(checkedItemPosition);
@@ -665,7 +664,7 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
             errorNotification.hideError();
         } else {
             // Remove bulk video download if the course has NO downloadable videos
-            UiUtil.removeFragmentByTag(CourseOutlineFragment.this, "bulk_download");
+            UiUtils.INSTANCE.removeFragmentByTag(CourseOutlineFragment.this, "bulk_download");
             if (isVideoMode) {
                 errorNotification.showError(R.string.no_videos_text, 0, -1, null);
             } else {
@@ -753,7 +752,7 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
         if (isVideoMode) {
             if (courseComponent.getDownloadableVideosCount() == 0) {
                 // Remove bulk video download if the course has NO downloadable videos
-                UiUtil.removeFragmentByTag(CourseOutlineFragment.this, "bulk_download");
+                UiUtils.INSTANCE.removeFragmentByTag(CourseOutlineFragment.this, "bulk_download");
             } else if (getActivity() != null) {
                 Fragment fragment = getChildFragmentManager().findFragmentByTag("bulk_download");
                 if (fragment == null) {
