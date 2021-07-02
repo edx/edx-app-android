@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
@@ -13,18 +14,17 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.FragmentActivity;
 
-import com.google.inject.Inject;
 import com.joanzapata.iconify.Icon;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
 import org.edx.mobile.R;
+import org.edx.mobile.databinding.AuthenticatedWebviewBinding;
 import org.edx.mobile.event.CourseDashboardRefreshEvent;
 import org.edx.mobile.event.FileSelectionEvent;
 import org.edx.mobile.event.MainDashboardRefreshEvent;
@@ -34,14 +34,11 @@ import org.edx.mobile.http.HttpStatus;
 import org.edx.mobile.http.notifications.FullScreenErrorNotification;
 import org.edx.mobile.interfaces.RefreshListener;
 import org.edx.mobile.logger.Logger;
-import org.edx.mobile.module.prefs.LoginPrefs;
 import org.edx.mobile.services.EdxCookieManager;
 import org.edx.mobile.util.NetworkUtil;
 import org.edx.mobile.util.WebViewUtil;
 
 import de.greenrobot.event.EventBus;
-import roboguice.RoboGuice;
-import roboguice.inject.InjectView;
 
 import static org.edx.mobile.util.WebViewUtil.EMPTY_HTML;
 
@@ -52,15 +49,6 @@ import static org.edx.mobile.util.WebViewUtil.EMPTY_HTML;
 public class AuthenticatedWebView extends FrameLayout implements RefreshListener {
     protected final Logger logger = new Logger(getClass().getName());
 
-    @Inject
-    private LoginPrefs loginPrefs;
-
-    @InjectView(R.id.loading_indicator)
-    private ProgressBar progressWheel;
-
-    @InjectView(R.id.webview)
-    protected WebView webView;
-
     private FullScreenErrorNotification fullScreenErrorNotification;
     private URLInterceptorWebViewClient webViewClient;
     private String url;
@@ -68,6 +56,7 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
     private boolean pageIsLoaded;
     private boolean didReceiveError;
     private boolean isManuallyReloadable;
+    private AuthenticatedWebviewBinding binding;
 
     public AuthenticatedWebView(Context context) {
         super(context);
@@ -85,10 +74,8 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
     }
 
     private void init() {
-        inflate(getContext(), R.layout.authenticated_webview, this);
-        RoboGuice.injectMembers(getContext(), this);
-        RoboGuice.getInjector(getContext()).injectViewMembers(this);
-        fullScreenErrorNotification = new FullScreenErrorNotification(webView);
+        binding = AuthenticatedWebviewBinding.inflate(LayoutInflater.from(getContext()), this, true);
+        fullScreenErrorNotification = new FullScreenErrorNotification(binding.webview);
     }
 
     public URLInterceptorWebViewClient getWebViewClient() {
@@ -96,7 +83,7 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
     }
 
     public WebView getWebView() {
-        return webView;
+        return binding.webview;
     }
 
     /**
@@ -114,8 +101,8 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
                             boolean isManuallyReloadable, boolean interceptAjaxRequest,
                             URLInterceptorWebViewClient.CompletionCallback completionCallback) {
         this.isManuallyReloadable = isManuallyReloadable;
-        webView.getSettings().setJavaScriptEnabled(true);
-        webViewClient = new URLInterceptorWebViewClient(fragmentActivity, webView, interceptAjaxRequest,
+        binding.webview.getSettings().setJavaScriptEnabled(true);
+        webViewClient = new URLInterceptorWebViewClient(fragmentActivity, binding.webview, interceptAjaxRequest,
                 completionCallback) {
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
@@ -189,7 +176,7 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
         this.url = url;
         this.javascript = javascript;
         if (!TextUtils.isEmpty(javascript)) {
-            webView.addJavascriptInterface(new JsInterface(), "JsInterface");
+            binding.webview.addJavascriptInterface(new JsInterface(), "JsInterface");
         }
         tryToLoadWebView(forceLoad);
     }
@@ -198,13 +185,13 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
         if (listener == null) {
             listener = value -> hideLoadingProgress();
         }
-        webView.evaluateJavascript(javascript, listener);
+        binding.webview.evaluateJavascript(javascript, listener);
     }
 
     private void tryToLoadWebView(boolean forceLoad) {
         System.gc(); //there is a well known Webview Memory Issue With Galaxy S3 With 4.3 Update
 
-        if ((!forceLoad && pageIsLoaded) || progressWheel == null) {
+        if (!forceLoad && pageIsLoaded) {
             return;
         }
 
@@ -226,30 +213,30 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
                 cookieManager.tryToRefreshSessionCookie();
             } else {
                 didReceiveError = false;
-                webView.loadUrl(url);
+                binding.webview.loadUrl(url);
             }
         }
     }
 
     public void tryToClearWebView() {
         pageIsLoaded = false;
-        WebViewUtil.clearWebviewHtml(webView);
+        WebViewUtil.clearWebviewHtml(binding.webview);
     }
 
     private void showLoadingProgress() {
         if (!TextUtils.isEmpty(javascript)) {
             // Hide webview to disable a11y during loading page, disabling a11y is not working in this case
-            webView.setVisibility(View.GONE);
+            binding.webview.setVisibility(View.GONE);
         }
-        progressWheel.setVisibility(View.VISIBLE);
+        binding.loadingIndicator.loadingIndicator.setVisibility(View.VISIBLE);
     }
 
     private void hideLoadingProgress() {
-        progressWheel.setVisibility(View.GONE);
+        binding.loadingIndicator.loadingIndicator.setVisibility(View.GONE);
         if (didReceiveError) {
-            webView.setVisibility(View.GONE);
+            binding.webview.setVisibility(View.GONE);
         } else {
-            webView.setVisibility(View.VISIBLE);
+            binding.webview.setVisibility(View.VISIBLE);
         }
     }
 
@@ -328,15 +315,11 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
     }
 
     public void onResume() {
-        if (webView != null) {
-            webView.onResume();
-        }
+        binding.webview.onResume();
     }
 
     public void onPause() {
-        if (webView != null) {
-            webView.onPause();
-        }
+        binding.webview.onPause();
     }
 
     public void onDestroyView() {
@@ -346,9 +329,7 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
     }
 
     public void onDestroy() {
-        if (webView != null) {
-            webView.destroy();
-        }
+        binding.webview.destroy();
     }
 
     @Override
@@ -364,14 +345,11 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
         @JavascriptInterface
         public void showErrorMessage(@NonNull final String errorMsg) {
             if (!TextUtils.isEmpty(errorMsg)) {
-                webView.post(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                didReceiveError = true;
-                                webView.setVisibility(View.GONE);
-                                showErrorView(errorMsg, FontAwesomeIcons.fa_exclamation_circle);
-                            }
+                binding.webview.post(
+                        () -> {
+                            didReceiveError = true;
+                            binding.webview.setVisibility(View.GONE);
+                            showErrorView(errorMsg, FontAwesomeIcons.fa_exclamation_circle);
                         }
                 );
             }
@@ -384,5 +362,9 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
 
     public boolean isPageLoaded() {
         return pageIsLoaded;
+    }
+
+    public IconProgressBar getProgressWheel() {
+        return binding.loadingIndicator.loadingIndicator;
     }
 }

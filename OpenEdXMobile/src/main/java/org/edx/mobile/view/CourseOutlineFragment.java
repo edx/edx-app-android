@@ -133,7 +133,7 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
 
     private CourseDateViewModel courseDateViewModel;
 
-    private View loadingIndicator;
+    private View progressWheel;
     private FrameLayout flBulkDownload;
     private CourseOutlineAdapter.DownloadListener downloadListener;
     private Call<CourseUpgradeResponse> getCourseUpgradeStatus;
@@ -170,13 +170,13 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
         listView = (ListView) view.findViewById(R.id.outline_list);
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         errorNotification = new FullScreenErrorNotification(swipeContainer);
-        loadingIndicator = view.findViewById(R.id.loading_indicator);
+        progressWheel = view.findViewById(R.id.progress_wheel);
         flBulkDownload = view.findViewById(R.id.fl_bulk_download_container);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Hide the progress bar as swipe layout has its own progress indicator
-                loadingIndicator.setVisibility(View.GONE);
+                progressWheel.setVisibility(View.GONE);
                 errorNotification.hideError();
                 canFetchBannerInfo = true;
                 getCourseComponentFromServer(false);
@@ -216,7 +216,7 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
         courseDateViewModel.getBannerInfo().observe(getViewLifecycleOwner(), this::initDatesBanner);
 
         courseDateViewModel.getShowLoader().observe(getViewLifecycleOwner(), flag ->
-                loadingIndicator.setVisibility(flag ? View.VISIBLE : View.GONE));
+                progressWheel.setVisibility(flag ? View.VISIBLE : View.GONE));
 
         courseDateViewModel.getSwipeRefresh().observe(getViewLifecycleOwner(), canRefresh ->
                 swipeContainer.setRefreshing(canRefresh));
@@ -315,7 +315,7 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
             return;
         }
         // Check if course data is available in persistable cache
-        loadingIndicator.setVisibility(View.VISIBLE);
+        progressWheel.setVisibility(View.VISIBLE);
         // Prepare the loader. Either re-connect with an existing one or start a new one.
         getLoaderManager().initLoader(0, null, this);
     }
@@ -352,7 +352,7 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
         if (courseComponent != null) {
             // Course data exist in persistable cache
             loadData(validateCourseComponent(courseComponent));
-            loadingIndicator.setVisibility(View.GONE);
+            progressWheel.setVisibility(View.GONE);
             // Send a server call in background for refreshed data
             getCourseComponentFromServer(false);
         } else {
@@ -363,15 +363,15 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
 
     @Override
     public void onLoaderReset(Loader<AsyncTaskResult<CourseComponent>> loader) {
-        loadingIndicator.setVisibility(View.VISIBLE);
+        progressWheel.setVisibility(View.VISIBLE);
     }
 
     public void getCourseComponentFromServer(boolean showProgress) {
-        if (loadingIndicator.getVisibility() == View.VISIBLE) {
+        if (progressWheel.getVisibility() == View.VISIBLE) {
             showProgress = true;
         }
         final TaskProgressCallback progressCallback = showProgress ?
-                new TaskProgressCallback.ProgressViewController(loadingIndicator) : null;
+                new TaskProgressCallback.ProgressViewController(progressWheel) : null;
         final String blocksApiVersion = environment.getConfig().getApiUrlVersionConfig().getBlocksApiVersion();
         final String courseId = courseData.getCourseId();
         getHierarchyCall = courseApi.getCourseStructureWithoutStale(blocksApiVersion, courseId);
