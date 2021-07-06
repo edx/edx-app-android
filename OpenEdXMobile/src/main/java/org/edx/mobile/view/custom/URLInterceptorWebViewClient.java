@@ -74,6 +74,7 @@ public class URLInterceptorWebViewClient extends WebViewClient {
     private Set<String> internalLinkHosts = new HashSet<>();
 
     private ValueCallback<Uri[]> filePathCallback;
+    private boolean ajaxInterceptorEmbed = false;
 
     public URLInterceptorWebViewClient(FragmentActivity activity, WebView webView,
                                        boolean interceptAjaxRequest, CompletionCallback completionCallback) {
@@ -120,6 +121,17 @@ public class URLInterceptorWebViewClient extends WebViewClient {
                 if (pageStatusListener != null) {
                     pageStatusListener.onPageLoadProgressChanged(view, progress);
                 }
+
+                if (interceptAjaxRequest && progress > 30 && !ajaxInterceptorEmbed) {
+                    // setup native callback to intercept the ajax requests.
+                    try {
+                        String nativeAjaxCallbackJS = FileUtil.loadTextFileFromAssets(activity, "js/nativeAjaxCallback.js");
+                        view.loadUrl(nativeAjaxCallbackJS);
+                        ajaxInterceptorEmbed = true;
+                    } catch (IOException e) {
+                        logger.error(e);
+                    }
+                }
             }
 
             @Override
@@ -158,15 +170,6 @@ public class URLInterceptorWebViewClient extends WebViewClient {
         // Page loading has finished.
         if (pageStatusListener != null) {
             pageStatusListener.onPageFinished();
-        }
-        if (interceptAjaxRequest) {
-            // setup native callback to intercept the ajax requests.
-            try {
-                String nativeAjaxCallbackJS = FileUtil.loadTextFileFromAssets(activity, "js/nativeAjaxCallback.js");
-                view.loadUrl(nativeAjaxCallbackJS);
-            } catch (IOException e) {
-                logger.error(e);
-            }
         }
     }
 
