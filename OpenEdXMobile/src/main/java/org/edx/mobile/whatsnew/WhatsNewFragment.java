@@ -75,7 +75,7 @@ public class WhatsNewFragment extends BaseFragment {
         final Map<String, String> map = new HashMap<>();
         map.put(Analytics.Keys.APP_VERSION, BuildConfig.VERSION_NAME);
         environment.getAnalyticsRegistry().trackScreenView(Analytics.Screens.WHATS_NEW, null,
-                null, map);
+                map);
     }
 
     private void initViewPager() {

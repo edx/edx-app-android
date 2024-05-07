@@ -813,7 +813,7 @@ class CourseTabsDashboardFragment : BaseFragment() {
             )
         ) {
             environment.analyticsRegistry.trackScreenView(
-                Analytics.Screens.COURSE_OUTLINE, courseData.courseId, null
+                Analytics.Screens.COURSE_OUTLINE, courseData.courseId
             )
         }
     }
@@ -825,7 +825,7 @@ class CourseTabsDashboardFragment : BaseFragment() {
             CourseOutlineFragment.makeArguments(courseData, null, true, null)
         ) {
             environment.analyticsRegistry.trackScreenView(
-                Analytics.Screens.VIDEOS_COURSE_VIDEOS, courseData.courseId, null
+                Analytics.Screens.VIDEOS_COURSE_VIDEOS, courseData.courseId
             )
         }
     }
@@ -837,7 +837,7 @@ class CourseTabsDashboardFragment : BaseFragment() {
             arguments
         ) {
             environment.analyticsRegistry.trackScreenView(
-                Analytics.Screens.FORUM_VIEW_TOPICS, courseData.courseId, null, null
+                Analytics.Screens.FORUM_VIEW_TOPICS, courseData.courseId
             )
         }
     }
@@ -849,7 +849,7 @@ class CourseTabsDashboardFragment : BaseFragment() {
             CourseDatesPageFragment.makeArguments(courseData)
         ) {
             analyticsRegistry.trackScreenView(
-                Analytics.Screens.COURSE_DATES, courseData.courseId, null
+                Analytics.Screens.COURSE_DATES, courseData.courseId
             )
         }
     }
@@ -861,7 +861,7 @@ class CourseTabsDashboardFragment : BaseFragment() {
             CourseHandoutFragment.makeArguments(courseData)
         ) {
             analyticsRegistry.trackScreenView(
-                Analytics.Screens.COURSE_HANDOUTS, courseData.courseId, null
+                Analytics.Screens.COURSE_HANDOUTS, courseData.courseId
             )
         }
     }
@@ -873,7 +873,7 @@ class CourseTabsDashboardFragment : BaseFragment() {
             CourseAnnouncementsFragment.makeArguments(courseData)
         ) {
             analyticsRegistry.trackScreenView(
-                Analytics.Screens.COURSE_ANNOUNCEMENTS, courseData.courseId, null
+                Analytics.Screens.COURSE_ANNOUNCEMENTS, courseData.courseId
             )
         }
     }

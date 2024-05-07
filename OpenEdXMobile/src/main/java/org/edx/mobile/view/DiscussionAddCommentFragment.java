@@ -78,7 +78,7 @@ public class DiscussionAddCommentFragment extends BaseFragment {
             values.put(Analytics.Keys.AUTHOR, discussionResponse.getAuthor());
         }
         analyticsRegistry.trackScreenView(Analytics.Screens.FORUM_ADD_RESPONSE_COMMENT,
-                discussionThread.getCourseId(), discussionThread.getTitle(), values);
+                discussionThread.getCourseId(), values);
     }
 
     @Override

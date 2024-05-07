@@ -55,9 +55,8 @@ class VideoDownloadQualityDialogFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        environment.analyticsRegistry.trackScreenView(
-            Analytics.Screens.VIDEO_DOWNLOAD_QUALITY, null,
-            Analytics.Values.SCREEN_NAVIGATION
+        environment.analyticsRegistry.trackEvent(
+            Analytics.Screens.VIDEO_DOWNLOAD_QUALITY, Analytics.Values.SCREEN_NAVIGATION
         )
         val platformName = resources.getString(R.string.platform_name)
         binding.tvVideoQualityMessage.text = ResourceUtil.getFormattedString(

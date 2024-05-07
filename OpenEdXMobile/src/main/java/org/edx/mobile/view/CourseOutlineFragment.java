@@ -435,7 +435,7 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment implements
         Intent intent = environment.getRouter().getCourseUnitDetailIntent(requireActivity(),
                 courseData, courseUpgradeData, component.getId(), isVideoMode);
         environment.getAnalyticsRegistry().trackScreenView(
-                Analytics.Screens.UNIT_DETAIL, courseData.getCourse().getId(), component.getParent().getInternalName());
+                Analytics.Screens.UNIT_DETAIL, courseData.getCourse().getId());
         courseUnitDetailLauncher.launch(intent);
     }
 
@@ -623,7 +623,7 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment implements
                 Map<String, String> values = new HashMap<>();
                 values.put(Analytics.Keys.SUBSECTION_ID, courseComponent.getBlockId());
                 environment.getAnalyticsRegistry().trackScreenView(isSpecialExamInfo ? Analytics.Screens.SPECIAL_EXAM_BLOCK : Analytics.Screens.EMPTY_SUBSECTION_OUTLINE,
-                        courseComponent.getCourseId(), null, values);
+                        courseComponent.getCourseId(), values);
 
                 errorNotification.showError(R.string.assessment_not_available, 0, R.string.assessment_view_on_web, new View.OnClickListener() {
                     @Override
@@ -637,7 +637,7 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment implements
 
         if (!isOnCourseOutline) {
             environment.getAnalyticsRegistry().trackScreenView(
-                    Analytics.Screens.SECTION_OUTLINE, courseData.getCourseId(), courseComponent.getInternalName());
+                    Analytics.Screens.SECTION_OUTLINE, courseData.getCourseId());
         }
         detectDeepLinking();
         courseComponentId = courseComponent.getId();

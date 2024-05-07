@@ -106,7 +106,7 @@ public class RatingDialogFragment extends DialogFragment implements AlertDialog.
         // Send rating dialog viewed analytics
         final Map<String, String> values = new HashMap<>();
         values.put(Analytics.Keys.APP_VERSION, BuildConfig.VERSION_NAME);
-        analyticsRegistry.trackScreenView(Analytics.Screens.APP_REVIEWS_VIEW_RATING, null, null, values);
+        analyticsRegistry.trackScreenView(Analytics.Screens.APP_REVIEWS_VIEW_RATING, null, values);
         analyticsRegistry.trackAppRatingDialogViewed(BuildConfig.VERSION_NAME);
     }
 

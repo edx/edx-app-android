@@ -22,11 +22,10 @@ public interface Analytics {
      *
      * @param screenName The screen name to track
      * @param courseId   course id of the course we are viewing
-     * @param action     any custom action we need to send with event
      * @param values     any custom key- value pairs we need to send with event
      */
     void trackScreenView(@NonNull String screenName, @Nullable String courseId,
-                         @Nullable String action, @Nullable Map<String, String> values);
+                         @Nullable Map<String, String> values);
 
     /**
      * This function is used to track Video Playing
@@ -688,9 +687,6 @@ public interface Analytics {
         String PAYMENT_ENABLED = "payment_enabled";
         String IAP_EXPERIMENT_GROUP = "iap_experiment_group";
         String IAP_FLOW_TYPE = "flow_type";
-
-        String CELL_CARRIER = "cell_carrier";
-        String CELL_ZERO_RATED = "cell_zero_rated";
 
         String CONNECTION_TYPE = "connection_type";
         String CONNECTION_SPEED = "connection_speed";
