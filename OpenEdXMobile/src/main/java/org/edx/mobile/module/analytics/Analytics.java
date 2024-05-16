@@ -739,7 +739,6 @@ public interface Analytics {
         String SLIDE = "slide";
         String MOBILE = "mobile";
         String VIDEOPLAYER = "videoplayer";
-        String PASSWORD = "Password";
         String FACEBOOK = "Facebook";
         String GOOGLE = "Google";
         String MICROSOFT = "Microsoft";
@@ -781,9 +780,7 @@ public interface Analytics {
         String COURSE_DISCOVERY = "course-discovery";
 
         String PUSH_NOTIFICATION = "notifications";
-        String ANNOUNCEMENT = "announcement";
 
-        String CONNECTION_CELL = "edx.bi.app.connection.cell";
         String CONNECTION_SPEED = "edx.bi.app.connection.speed";
 
         String NOTIFICATION_RECEIVED = "edx.bi.app.notification.course.update.received";
@@ -840,7 +837,6 @@ public interface Analytics {
         // Cast device connection state
         String CAST_CONNECTED = "edx.bi.app.cast.connected";
         String CAST_DISCONNECTED = "edx.bi.app.cast.disconnected";
-        String VIDEO_CASTED = "edx.bi.app.cast.video_casted";
         // -- Play mediums --
         // Casting Device Types
         String GOOGLE_CAST = "google_cast";
@@ -1052,7 +1048,6 @@ public interface Analytics {
         // Casting Devices Event
         String CAST_CONNECTED = "Cast: Connected";
         String CAST_DISCONNECTED = "Cast: Disconnected";
-        String VIDEO_CASTED = "Cast: Video Casted";
         // PLS Course Dates Banner
         String PLS_BANNER_VIEWED = "PLS Banner Viewed";
         String PLS_SHIFT_DATES_BUTTON_TAPPED = "PLS Shift Button Tapped";

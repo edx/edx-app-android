@@ -227,7 +227,7 @@ class CourseTabsDashboardFragment : BaseFragment() {
             EventBus.getDefault().register(this)
 
         environment.analyticsRegistry.trackScreenView(
-            Analytics.Screens.COURSE_DASHBOARD, courseData.course.id, null
+            Analytics.Screens.COURSE_DASHBOARD, courseData.course.id
         )
     }
 
