@@ -22,11 +22,10 @@ public interface Analytics {
      *
      * @param screenName The screen name to track
      * @param courseId   course id of the course we are viewing
-     * @param action     any custom action we need to send with event
      * @param values     any custom key- value pairs we need to send with event
      */
     void trackScreenView(@NonNull String screenName, @Nullable String courseId,
-                         @Nullable String action, @Nullable Map<String, String> values);
+                         @Nullable Map<String, String> values);
 
     /**
      * This function is used to track Video Playing
@@ -689,9 +688,6 @@ public interface Analytics {
         String IAP_EXPERIMENT_GROUP = "iap_experiment_group";
         String IAP_FLOW_TYPE = "flow_type";
 
-        String CELL_CARRIER = "cell_carrier";
-        String CELL_ZERO_RATED = "cell_zero_rated";
-
         String CONNECTION_TYPE = "connection_type";
         String CONNECTION_SPEED = "connection_speed";
 
@@ -743,7 +739,6 @@ public interface Analytics {
         String SLIDE = "slide";
         String MOBILE = "mobile";
         String VIDEOPLAYER = "videoplayer";
-        String PASSWORD = "Password";
         String FACEBOOK = "Facebook";
         String GOOGLE = "Google";
         String MICROSOFT = "Microsoft";
@@ -785,9 +780,7 @@ public interface Analytics {
         String COURSE_DISCOVERY = "course-discovery";
 
         String PUSH_NOTIFICATION = "notifications";
-        String ANNOUNCEMENT = "announcement";
 
-        String CONNECTION_CELL = "edx.bi.app.connection.cell";
         String CONNECTION_SPEED = "edx.bi.app.connection.speed";
 
         String NOTIFICATION_RECEIVED = "edx.bi.app.notification.course.update.received";
@@ -844,7 +837,6 @@ public interface Analytics {
         // Cast device connection state
         String CAST_CONNECTED = "edx.bi.app.cast.connected";
         String CAST_DISCONNECTED = "edx.bi.app.cast.disconnected";
-        String VIDEO_CASTED = "edx.bi.app.cast.video_casted";
         // -- Play mediums --
         // Casting Device Types
         String GOOGLE_CAST = "google_cast";
@@ -1056,7 +1048,6 @@ public interface Analytics {
         // Casting Devices Event
         String CAST_CONNECTED = "Cast: Connected";
         String CAST_DISCONNECTED = "Cast: Disconnected";
-        String VIDEO_CASTED = "Cast: Video Casted";
         // PLS Course Dates Banner
         String PLS_BANNER_VIEWED = "PLS Banner Viewed";
         String PLS_SHIFT_DATES_BUTTON_TAPPED = "PLS Shift Button Tapped";

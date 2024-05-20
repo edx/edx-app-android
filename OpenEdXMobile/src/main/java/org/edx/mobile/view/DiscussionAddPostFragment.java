@@ -248,7 +248,7 @@ public class DiscussionAddPostFragment extends BaseFragment {
                 Map<String, String> values = new HashMap<>();
                 values.put(Analytics.Keys.TOPIC_ID, selectedTopic.getIdentifier());
                 analyticsRegistry.trackScreenView(Analytics.Screens.FORUM_CREATE_TOPIC_THREAD,
-                        courseData.getCourse().getId(), selectedTopic.getName(), values);
+                        courseData.getCourse().getId(), values);
             }
         });
     }

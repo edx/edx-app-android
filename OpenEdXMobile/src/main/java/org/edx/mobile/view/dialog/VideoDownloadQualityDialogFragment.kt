@@ -55,10 +55,7 @@ class VideoDownloadQualityDialogFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        environment.analyticsRegistry.trackScreenView(
-            Analytics.Screens.VIDEO_DOWNLOAD_QUALITY, null,
-            Analytics.Values.SCREEN_NAVIGATION
-        )
+        environment.analyticsRegistry.trackScreenView(Analytics.Screens.VIDEO_DOWNLOAD_QUALITY)
         val platformName = resources.getString(R.string.platform_name)
         binding.tvVideoQualityMessage.text = ResourceUtil.getFormattedString(
             resources,
@@ -84,7 +81,7 @@ class VideoDownloadQualityDialogFragment(
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding =
-            VideoQualityDialogFragmentBinding.inflate(LayoutInflater.from(context), null, false)
+            VideoQualityDialogFragmentBinding.inflate(layoutInflater, null, false)
         return AlertDialog.Builder(requireContext())
             .setNegativeButton(
                 R.string.label_cancel

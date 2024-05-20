@@ -90,7 +90,7 @@ public class CourseDiscussionCommentsFragment extends BaseFragment implements Di
             values.put(Analytics.Keys.AUTHOR, discussionResponse.getAuthor());
         }
         analyticsRegistry.trackScreenView(Analytics.Screens.FORUM_VIEW_RESPONSE_COMMENTS,
-                discussionThread.getCourseId(), discussionThread.getTitle(), values);
+                discussionThread.getCourseId(), values);
     }
 
     @Nullable

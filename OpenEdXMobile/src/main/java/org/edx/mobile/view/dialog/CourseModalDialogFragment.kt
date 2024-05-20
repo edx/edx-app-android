@@ -121,7 +121,6 @@ class CourseModalDialogFragment : DialogFragment() {
         environment.analyticsRegistry.trackScreenView(
             Events.VALUE_PROP_MODAL_VIEW,
             courseId,
-            null,
             mapOf(Pair(KEY_SCREEN_NAME, screenName))
         )
         var experimentGroup: String? = null

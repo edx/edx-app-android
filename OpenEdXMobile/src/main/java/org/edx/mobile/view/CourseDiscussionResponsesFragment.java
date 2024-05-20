@@ -169,7 +169,7 @@ public class CourseDiscussionResponsesFragment extends BaseFragment implements C
             values.put(Analytics.Keys.AUTHOR, discussionThread.getAuthor());
         }
         analyticsRegistry.trackScreenView(Analytics.Screens.FORUM_VIEW_THREAD,
-                courseData.getCourse().getId(), discussionThread.getTitle(), values);
+                courseData.getCourse().getId(), values);
     }
 
     private void setScreenTitle() {

@@ -96,7 +96,7 @@ public class CourseDiscussionPostsSearchFragment extends CourseDiscussionPostsBa
         final Map<String, String> values = new HashMap<>();
         values.put(Analytics.Keys.SEARCH_STRING, searchQuery);
         analyticsRegistry.trackScreenView(Analytics.Screens.FORUM_SEARCH_THREADS,
-                courseData.getCourse().getId(), searchQuery, values);
+                courseData.getCourse().getId(), values);
     }
 
     private void parseExtras() {

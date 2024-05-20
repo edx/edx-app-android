@@ -121,18 +121,13 @@ public class SegmentAnalytics implements Analytics {
      *
      * @param screenName The screen name to track
      * @param courseId   course id of the course we are viewing
-     * @param action     any custom action we need to send with event
      * @param values     any custom key-value pairs we need to send with event
      */
     @Override
     public void trackScreenView(@NonNull String screenName, @Nullable String courseId,
-                                @Nullable String action,
                                 @Nullable Map<String, String> values) {
         // Sending screen view
         SegmentEvent aEvent = new SegmentEvent();
-        if (!TextUtils.isEmpty(action)) {
-            aEvent.properties.put(Keys.ACTION, action);
-        }
         if (!TextUtils.isEmpty(courseId)) {
             aEvent.properties.put(Keys.COURSE_ID, courseId);
         }
@@ -418,7 +413,7 @@ public class SegmentAnalytics implements Analytics {
         aEvent.properties.putValue(Keys.NAME, Values.DISCOVERY_COURSES_SEARCH);
         aEvent.properties.putValue(Keys.LABEL, searchQuery);
         aEvent.data.putValue(Keys.APP_VERSION, versionName);
-        aEvent.data.putValue(Keys.ACTION, isLoggedIn ? Values.DISCOVERY_COURSES_SEARCH_TAB : Values.DISCOVERY_COURSES_SEARCH_LANDING);
+        aEvent.data.putValue(Keys.SCREEN_NAME, isLoggedIn ? Values.DISCOVERY_COURSES_SEARCH_TAB : Values.DISCOVERY_COURSES_SEARCH_LANDING);
         trackSegmentEvent(Events.DISCOVERY_COURSES_SEARCH, aEvent.properties);
     }
 
@@ -984,7 +979,7 @@ public class SegmentAnalytics implements Analytics {
         aEvent.properties = addCategoryToBiEvents(aEvent.properties,
                 Values.USER_ENGAGEMENT, Values.DISCOVERY);
         aEvent.data.putValue(Keys.APP_VERSION, versionName);
-        aEvent.data.putValue(Keys.ACTION, Values.DISCOVERY_COURSES_SEARCH_LANDING);
+        aEvent.data.putValue(Keys.SCREEN_NAME, Values.DISCOVERY_COURSES_SEARCH_LANDING);
         trackSegmentEvent(Events.EXPLORE_ALL_COURSES, aEvent.properties);
     }
 

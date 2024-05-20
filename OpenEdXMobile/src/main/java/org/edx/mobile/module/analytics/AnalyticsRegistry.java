@@ -34,14 +34,13 @@ public class AnalyticsRegistry implements Analytics {
         trackScreenView(screenName, null, null);
     }
 
-    public void trackScreenView(@NonNull String screenName, @Nullable String courseId,
-                                @Nullable String action) {
-        trackScreenView(screenName, courseId, action, null);
+    public void trackScreenView(@NonNull String screenName, @Nullable String courseId) {
+        trackScreenView(screenName, courseId, null);
     }
 
     @Override
     public void trackScreenView(@NonNull String screenName, @Nullable String courseId,
-                                @Nullable String action, @Nullable Map<String, String> values) {
+                                @Nullable Map<String, String> values) {
         // Remove a key-value pair, if the value for a key is null
         if (values != null) {
             for (Map.Entry<String, String> entry : values.entrySet()) {
@@ -52,7 +51,7 @@ public class AnalyticsRegistry implements Analytics {
         }
 
         for (Analytics service : services) {
-            service.trackScreenView(screenName, courseId, action, values);
+            service.trackScreenView(screenName, courseId, values);
         }
     }
 

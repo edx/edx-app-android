@@ -57,17 +57,12 @@ public class FirebaseAnalytics implements Analytics {
      *
      * @param screenName The screen name to track
      * @param courseId   course id of the course we are viewing
-     * @param action     any custom action we need to send with event
      * @param values     any custom key-value pairs we need to send with event
      */
     @Override
     public void trackScreenView(@NonNull String screenName, @Nullable String courseId,
-                                @Nullable String action,
                                 @Nullable Map<String, String> values) {
         final FirebaseEvent event = new FirebaseEvent(screenName);
-        if (!TextUtils.isEmpty(action)) {
-            event.putString(Keys.ACTION, action);
-        }
         if (!TextUtils.isEmpty(courseId)) {
             event.putCourseId(courseId);
         }
@@ -241,7 +236,7 @@ public class FirebaseAnalytics implements Analytics {
                 Values.DISCOVERY_COURSES_SEARCH);
         event.putString(Keys.LABEL, searchQuery);
         event.putString(Keys.APP_VERSION, versionName);
-        event.putString(Keys.ACTION, isLoggedIn ? Values.DISCOVERY_COURSES_SEARCH_TAB : Values.DISCOVERY_COURSES_SEARCH_LANDING);
+        event.putString(Keys.SCREEN_NAME, isLoggedIn ? Values.DISCOVERY_COURSES_SEARCH_TAB : Values.DISCOVERY_COURSES_SEARCH_LANDING);
         logFirebaseEvent(event.getName(), event.getBundle());
     }
 
@@ -699,7 +694,7 @@ public class FirebaseAnalytics implements Analytics {
         final FirebaseEvent event = new FirebaseEvent(Events.EXPLORE_ALL_COURSES, Values.EXPLORE_ALL_COURSES);
         event.addCategoryToBiEvents(Values.USER_ENGAGEMENT, Values.DISCOVERY);
         event.putString(Keys.APP_VERSION, versionName);
-        event.putString(Keys.ACTION, Values.DISCOVERY_COURSES_SEARCH_LANDING);
+        event.putString(Keys.SCREEN_NAME, Values.DISCOVERY_COURSES_SEARCH_LANDING);
         logFirebaseEvent(event.getName(), event.getBundle());
     }
 

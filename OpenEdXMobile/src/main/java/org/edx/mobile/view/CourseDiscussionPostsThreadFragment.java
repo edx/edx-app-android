@@ -224,19 +224,16 @@ public class CourseDiscussionPostsThreadFragment extends CourseDiscussionPostsBa
     }
 
     private void trackScreenView() {
-        final String actionItem;
         final Map<String, String> values = new HashMap<>();
         String topicId = discussionTopic.getIdentifier();
         if (DiscussionTopic.ALL_TOPICS_ID.equals(topicId)) {
-            topicId = actionItem = Analytics.Values.POSTS_ALL;
+            topicId = Analytics.Values.POSTS_ALL;
         } else if (DiscussionTopic.FOLLOWING_TOPICS_ID.equals(topicId)) {
-            topicId = actionItem = Analytics.Values.POSTS_FOLLOWING;
-        } else {
-            actionItem = discussionTopic.getName();
+            topicId = Analytics.Values.POSTS_FOLLOWING;
         }
         values.put(Analytics.Keys.TOPIC_ID, topicId);
         analyticsRegistry.trackScreenView(Analytics.Screens.FORUM_VIEW_TOPIC_THREADS,
-                courseData.getCourse().getId(), actionItem, values);
+                courseData.getCourse().getId(), values);
     }
 
     @Override
