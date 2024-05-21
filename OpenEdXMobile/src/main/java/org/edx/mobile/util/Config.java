@@ -82,6 +82,7 @@ public class Config {
     private static final String DOWNLOAD_TO_SD_CARD_ENABLED = "DOWNLOAD_TO_SD_CARD_ENABLED";
     private static final String ANNOUNCEMENTS_ENABLED = "ANNOUNCEMENTS_ENABLED";
     private static final String CHROMECAST_ENABLED = "CHROMECAST_ENABLED";
+    private static final String FULLSTORY = "FULLSTORY";
 
     public static class DiscoveryConfig {
         @SerializedName("TYPE")
@@ -331,6 +332,18 @@ public class Config {
 
         public boolean isPushNotificationsEnabled() {
             return mPushNotificationsEnabled;
+        }
+    }
+
+    public static class FullstoryConfig {
+        @SerializedName("ENABLED")
+        private boolean enabled;
+
+        @SerializedName("ORG_ID")
+        private String orgId;
+
+        public boolean isEnabled() {
+            return enabled && !TextUtils.isEmpty(orgId);
         }
     }
 
@@ -672,6 +685,11 @@ public class Config {
     @NonNull
     public BrazeConfig getBrazeConfig() {
         return getObjectOrNewInstance(BRAZE, BrazeConfig.class);
+    }
+
+    @NonNull
+    public FullstoryConfig getFullstoryConfig() {
+        return getObjectOrNewInstance(FULLSTORY, FullstoryConfig.class);
     }
 
     @NonNull

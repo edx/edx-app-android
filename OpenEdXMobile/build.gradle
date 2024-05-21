@@ -310,6 +310,19 @@ if (isMicrosoftEnabled) {
     microsoftSignature = microsoftConfig.get("SIGNATURE_HASH")
 }
 
+def fullstoryConfig = config.get("FULLSTORY")
+
+if (fullstoryConfig?.get("ENABLED") ?: false) {
+    def fullstoryOrgId = fullstoryConfig?.get("ORG_ID")
+
+    apply plugin: "fullstory"
+    fullstory {
+        org fullstoryOrgId
+        enabledVariants 'debug|release'
+        logcatLevel 'error'
+    }
+}
+
 android {
     namespace APPLICATION_ID
     compileSdkVersion COMPILE_SDK_VERSION

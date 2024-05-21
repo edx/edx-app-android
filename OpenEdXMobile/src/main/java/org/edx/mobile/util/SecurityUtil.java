@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 
 import org.edx.mobile.core.EdxDefaultModule;
 import org.edx.mobile.logger.Logger;
+import org.edx.mobile.module.analytics.FullstoryAnalytics;
 import org.edx.mobile.module.db.DbStructure;
 import org.edx.mobile.module.prefs.PrefBaseManager;
 import org.edx.mobile.services.CourseManager;
@@ -40,6 +41,7 @@ public class SecurityUtil {
         final ArrayList<String> exceptionsList = new ArrayList<>();
         Collections.addAll(exceptionsList, PrefBaseManager.Companion.getAllPreferenceFileNames());
         exceptionsList.add(DbStructure.NAME);
+        exceptionsList.add(FullstoryAnalytics.CACHE_DIRECTORY_NAME);
 
         // Clear the data directory
         PackageManager packageManager = context.getPackageManager();

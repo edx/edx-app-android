@@ -24,6 +24,7 @@ import org.edx.mobile.logger.Logger;
 import org.edx.mobile.model.api.UnacknowledgedNoticeResponse;
 import org.edx.mobile.module.analytics.AnalyticsRegistry;
 import org.edx.mobile.module.analytics.FirebaseAnalytics;
+import org.edx.mobile.module.analytics.FullstoryAnalytics;
 import org.edx.mobile.module.analytics.SegmentAnalytics;
 import org.edx.mobile.module.prefs.InfoPrefs;
 import org.edx.mobile.module.storage.IStorage;
@@ -69,6 +70,9 @@ public abstract class MainApplication extends MultiDexApplication {
     FirebaseAnalytics firebaseAnalytics;
 
     @Inject
+    FullstoryAnalytics fullstoryAnalytics;
+
+    @Inject
     IStorage iStorage;
 
     @Override
@@ -94,6 +98,9 @@ public abstract class MainApplication extends MultiDexApplication {
             // Only add Firebase as an analytics provider if enabled in the config and Segment is disabled
             // because if Segment is enabled, we'll be using Segment's implementation for Firebase
             analyticsRegistry.addAnalyticsProvider(firebaseAnalytics);
+        }
+        if (config.getFullstoryConfig().isEnabled()) {
+            analyticsRegistry.addAnalyticsProvider(fullstoryAnalytics);
         }
 
         if (config.getFirebaseConfig().isEnabled()) {
