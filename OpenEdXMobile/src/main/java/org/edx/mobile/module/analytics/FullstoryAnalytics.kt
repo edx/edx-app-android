@@ -242,12 +242,12 @@ class FullstoryAnalytics @Inject constructor(
         videoCount: Long
     ) {
         val fullstoryEvent = FullstoryEvent().apply {
+            properties[Keys.NAME] = Values.BULK_DOWNLOAD_SUBSECTION
+            properties[Keys.NO_OF_VIDEOS] = videoCount
             if (section != null && subSection != null) {
                 properties[Keys.COURSE_SECTION] = section
                 properties[Keys.COURSE_SUBSECTION] = subSection
             }
-            properties[Keys.NO_OF_VIDEOS] = videoCount
-            properties[Keys.NAME] = Values.BULK_DOWNLOAD_SUBSECTION
             properties.addCourseContext(enrollmentId, null, Values.DOWNLOAD_MODULE)
         }
         trackFullstoryEvent(Events.BULK_DOWNLOAD_SUBSECTION, fullstoryEvent.properties)
@@ -377,9 +377,9 @@ class FullstoryAnalytics @Inject constructor(
 
     override fun trackEnrollClicked(courseId: String, emailOptIn: Boolean) {
         val fullstoryEvent = FullstoryEvent().apply {
+            properties[Keys.NAME] = Values.USER_COURSE_ENROLL_CLICKED
             properties[Keys.COURSE_ID] = courseId
             properties[Keys.EMAIL_OPT_IN] = emailOptIn
-            properties[Keys.NAME] = Values.USER_COURSE_ENROLL_CLICKED
             properties.addLabelAndCategory(label = courseId, category = Values.CONVERSION)
         }
         trackFullstoryEvent(Events.COURSE_ENROLL_CLICKED, fullstoryEvent.properties)
@@ -387,9 +387,9 @@ class FullstoryAnalytics @Inject constructor(
 
     override fun trackEnrolmentSuccess(courseId: String, emailOptIn: Boolean) {
         val fullstoryEvent = FullstoryEvent().apply {
+            properties[Keys.NAME] = Values.USER_COURSE_ENROLL_SUCCESS
             properties[Keys.COURSE_ID] = courseId
             properties[Keys.EMAIL_OPT_IN] = emailOptIn
-            properties[Keys.NAME] = Values.USER_COURSE_ENROLL_SUCCESS
             properties.addLabelAndCategory(label = courseId, category = Values.CONVERSION)
         }
         trackFullstoryEvent(Events.COURSE_ENROLL_SUCCESS, fullstoryEvent.properties)
@@ -772,10 +772,10 @@ class FullstoryAnalytics @Inject constructor(
         showMore: Boolean
     ) {
         val fullstoryEvent = FullstoryEvent().apply {
-            properties[Keys.COURSE_ID] = courseId
-            properties[Keys.PACING] = if (isSelfPaced) Keys.SELF else Keys.INSTRUCTOR
             properties[Keys.NAME] = if (showMore) Values.VALUE_PROP_SHOW_MORE_CLICKED
             else Values.VALUE_PROP_SHOW_LESS_CLICKED
+            properties[Keys.COURSE_ID] = courseId
+            properties[Keys.PACING] = if (isSelfPaced) Keys.SELF else Keys.INSTRUCTOR
             if (price.isNotNullOrEmpty()) {
                 properties[Keys.PRICE] = price
             }
@@ -833,19 +833,19 @@ class FullstoryAnalytics @Inject constructor(
 
     override fun trackCourseSectionCelebration(courseId: String) {
         val fullstoryEvent = FullstoryEvent().apply {
-            properties[Keys.COURSE_ID] = courseId
             properties[Keys.NAME] = Values.COURSE_SECTION_COMPLETION_CELEBRATION
+            properties[Keys.COURSE_ID] = courseId
         }
         trackFullstoryEvent(Events.COURSE_SECTION_COMPLETION_CELEBRATION, fullstoryEvent.properties)
     }
 
     override fun trackCourseCelebrationShareClicked(courseId: String, socialService: String?) {
         val fullstoryEvent = FullstoryEvent().apply {
+            properties[Keys.NAME] = Values.COURSE_SECTION_CELEBRATION_SHARE_CLICKED
             properties[Keys.COURSE_ID] = courseId
             if (socialService.isNotNullOrEmpty()) {
                 properties[Keys.SERVICE] = socialService
             }
-            properties[Keys.NAME] = Values.COURSE_SECTION_CELEBRATION_SHARE_CLICKED
         }
         trackFullstoryEvent(Events.CELEBRATION_SOCIAL_SHARE_CLICKED, fullstoryEvent.properties)
     }
@@ -916,8 +916,8 @@ class FullstoryAnalytics @Inject constructor(
 
     override fun trackScreenViewEvent(eventName: String, screenName: String) {
         val fullstoryEvent = FullstoryEvent().apply {
-            properties[Keys.SCREEN_NAME] = screenName
             properties[Keys.NAME] = Values.SCREEN_NAVIGATION
+            properties[Keys.SCREEN_NAME] = screenName
         }
         trackFullstoryEvent(Events.PROFILE_PAGE_VIEWED, fullstoryEvent.properties)
     }

@@ -491,6 +491,12 @@ class CourseUnitNavigationActivity : BaseFragmentActivity(), CourseUnitFragment.
         val unitComponents = currentUnit.getChildren(isVideoMode)
         val currentComponentIndex = unitComponents.indexOf(currentComponent)
         updateCompletionProgressBar(currentComponentIndex, unitComponents.size)
+
+        environment.analyticsRegistry.trackCourseComponentViewed(
+            currentComponent.id,
+            courseData.courseId,
+            currentComponent.blockId
+        )
     }
 
     private fun getComponentList(): MutableList<CourseComponent> {
