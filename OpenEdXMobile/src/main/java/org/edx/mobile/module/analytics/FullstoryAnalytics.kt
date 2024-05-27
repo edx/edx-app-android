@@ -46,8 +46,6 @@ class FullstoryAnalytics @Inject constructor(
     override fun identifyUser(userID: String, email: String?, username: String) {
         FS.identify(
             userID, mapOf(
-                "email" to email,
-                "username" to username,
                 "displayName" to userID
             )
         )
