@@ -19,6 +19,7 @@ apply plugin: "edxapp"
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 apply plugin: "kotlin-kapt" //To enable data binding with kotlin
+apply plugin: "fullstory"
 apply plugin: "jacoco"
 edx {
     platform = ANDROID
@@ -308,6 +309,18 @@ if (isMicrosoftEnabled) {
 // Validate Microsoft configurations
     AndroidHelper.isValidConfigurations(microsoftConfig)
     microsoftSignature = microsoftConfig.get("SIGNATURE_HASH")
+}
+
+def fullstoryConfig = config.get("FULLSTORY")
+
+if (fullstoryConfig?.get("ENABLED") ?: false) {
+    def fullstoryOrgId = fullstoryConfig?.get("ORG_ID")
+
+    fullstory {
+        org fullstoryOrgId
+        enabledVariants 'debug|release'
+        logcatLevel 'error'
+    }
 }
 
 android {
