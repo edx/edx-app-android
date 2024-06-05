@@ -728,9 +728,12 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment implements
                             beginTransaction().replace(flBulkDownload.getId(), fragment, "bulk_download").
                             commitAllowingStateLoss();
                 }
-                ((BulkDownloadFragment) fragment).populateViewHolder(downloadListener,
+                ((BulkDownloadFragment) fragment).populateViewHolder(
+                        downloadListener,
+                        courseComponent.getCourseId(),
                         isOnCourseOutline ? courseComponent.getCourseId() : courseComponent.getId(),
-                        courseComponent.getVideos(true));
+                        courseComponent.getVideos(true)
+                );
             }
         }
     }

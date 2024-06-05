@@ -58,6 +58,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class BulkDownloadFragment extends BaseFragment {
     private final String EXTRA_COURSE_VIDEOS_STATUS = "extra_course_videos_status";
+    private final String EXTRA_COURSE_ID = "extra_course_id";
 
     protected final Logger logger = new Logger(getClass().getName());
 
@@ -105,6 +106,10 @@ public class BulkDownloadFragment extends BaseFragment {
     private boolean bulkDownloadWasStarted = false;
 
     /**
+     * ID of the course.
+     */
+    private String courseId = "";
+    /**
      * Summarises the download status of all the videos within a course.
      */
     private CourseVideosStatus videosStatus = new CourseVideosStatus();
@@ -139,6 +144,7 @@ public class BulkDownloadFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             videosStatus = savedInstanceState.getParcelable(EXTRA_COURSE_VIDEOS_STATUS);
+            courseId = savedInstanceState.getString(EXTRA_COURSE_ID);
         }
         EventBus.getDefault().register(this);
     }
@@ -147,6 +153,7 @@ public class BulkDownloadFragment extends BaseFragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(EXTRA_COURSE_VIDEOS_STATUS, videosStatus);
+        outState.putString(EXTRA_COURSE_ID, courseId);
     }
 
     @Override
@@ -172,7 +179,7 @@ public class BulkDownloadFragment extends BaseFragment {
         ViewCompat.setImportantForAccessibility(binding.swDownload, ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_YES);
         initDownloadSwitch();
         if (totalDownloadableVideos != null && videosStatus.courseComponentId != null) {
-            populateViewHolder(downloadListener, videosStatus.courseComponentId, totalDownloadableVideos);
+            populateViewHolder(downloadListener, courseId, videosStatus.courseComponentId, totalDownloadableVideos);
         }
         if (bulkDownloadWasCancelled) {
             onEvent(new BulkVideosDownloadCancelledEvent());
@@ -185,8 +192,12 @@ public class BulkDownloadFragment extends BaseFragment {
     }
 
 
-    public void populateViewHolder(CourseOutlineAdapter.DownloadListener downloadListener, @NonNull String componentId,
-                                   @Nullable List<CourseComponent> downloadableVideos) {
+    public void populateViewHolder(CourseOutlineAdapter.DownloadListener downloadListener,
+                                   @NonNull String courseId,
+                                   @NonNull String componentId,
+                                   @Nullable List<CourseComponent> downloadableVideos
+    ) {
+        this.courseId = courseId;
         this.downloadListener = downloadListener;
         this.totalDownloadableVideos = downloadableVideos;
         videosStatus.courseComponentId = componentId;
@@ -437,7 +448,7 @@ public class BulkDownloadFragment extends BaseFragment {
                 updateUI();
 
                 environment.getAnalyticsRegistry().trackBulkDownloadSwitchOff(
-                        videosStatus.courseComponentId, videosStatus.total);
+                        courseId, videosStatus.total);
             }
         });
     }
@@ -460,7 +471,7 @@ public class BulkDownloadFragment extends BaseFragment {
         downloadListener.download(remainingVideos);
 
         environment.getAnalyticsRegistry().trackBulkDownloadSwitchOn(
-                videosStatus.courseComponentId, videosStatus.total, videosStatus.remaining);
+                courseId, videosStatus.total, videosStatus.remaining);
     }
 
     private void startVideosDeletion() {
@@ -570,7 +581,7 @@ public class BulkDownloadFragment extends BaseFragment {
     @Override
     public void onRevisit() {
         if (totalDownloadableVideos != null && videosStatus.courseComponentId != null) {
-            populateViewHolder(downloadListener, videosStatus.courseComponentId, totalDownloadableVideos);
+            populateViewHolder(downloadListener, courseId, videosStatus.courseComponentId, totalDownloadableVideos);
         }
     }
 
