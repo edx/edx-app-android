@@ -37,3 +37,7 @@
 -dontwarn com.google.protobuf.**
 -dontwarn com.huawei.hms.ads.**
 -dontwarn edu.umd.cs.findbugs.**
+
+# Keep Rule to preserve classes, methods, and fields in the YouTube Player SDK
+# This is necessary for reflection on WebView for Fullstory integration
+-keep class com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.** { *; }
