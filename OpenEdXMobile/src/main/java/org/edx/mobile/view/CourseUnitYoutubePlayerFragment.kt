@@ -8,7 +8,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
 import android.widget.LinearLayout
+import com.fullstory.FS
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants.PlaybackQuality
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants.PlaybackRate
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants.PlayerError
@@ -34,6 +36,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import subtitleFile.Caption
 import subtitleFile.TimedTextObject
+import java.lang.reflect.Field
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
@@ -66,6 +69,7 @@ class CourseUnitYoutubePlayerFragment : BaseCourseUnitVideoFragment(), YouTubePl
                 releaseYoutubePlayer()
                 youTubePlayerView = YouTubePlayerView(requireContext())
                 youTubePlayerView?.enableAutomaticInitialization = false
+                handleFullstoryJSInjection(youTubePlayerView)
                 youTubePlayerView?.addFullscreenListener(this)
                 attempts = 0
                 youTubePlayerView?.initialize(
@@ -80,6 +84,40 @@ class CourseUnitYoutubePlayerFragment : BaseCourseUnitVideoFragment(), YouTubePl
             }
         } catch (localException: NullPointerException) {
             logger.error(localException)
+        }
+    }
+
+    /**
+     * Handles the JS injection of Fullstory into the YouTubePlayerView.
+     *
+     * @param youTubePlayerView The YouTubePlayerView instance.
+     */
+    private fun handleFullstoryJSInjection(youTubePlayerView: YouTubePlayerView?) {
+        if (environment.config.fullstoryConfig.isEnabled.not()) return
+
+        try {
+            youTubePlayerView?.let { playerView ->
+                val youTubePlayerViewClass = playerView.javaClass
+
+                // Accessing the private field "legacyTubePlayerView"
+                val legacyTubePlayerViewField: Field =
+                    youTubePlayerViewClass.getDeclaredField("legacyTubePlayerView")
+                legacyTubePlayerViewField.isAccessible = true
+                val legacyTubePlayerViewInstance = legacyTubePlayerViewField.get(youTubePlayerView)
+                val legacyTubePlayerViewClass = legacyTubePlayerViewInstance.javaClass
+
+                // Accessing the private field "webViewYouTubePlayer" within LegacyTubePlayerView
+                val webViewYouTubePlayerField: Field =
+                    legacyTubePlayerViewClass.getDeclaredField("webViewYouTubePlayer")
+                webViewYouTubePlayerField.isAccessible = true
+                val webViewYouTubePlayerInstance =
+                    webViewYouTubePlayerField.get(legacyTubePlayerViewInstance) as WebView
+
+                // Disabling Fullstory injection.
+                FS.disableInjection(webViewYouTubePlayerInstance)
+            }
+        } catch (ex: Exception) {
+            logger.error(ex, true)
         }
     }
 
