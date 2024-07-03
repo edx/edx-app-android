@@ -58,7 +58,7 @@ data class EnrolledCoursesResponse(
     val productInfo: ProductInfo?
         get() = courseSku?.let { courseSku ->
             storeSku?.let { storeSku ->
-                ProductInfo(courseSku, storeSku)
+                ProductInfo(courseSku, storeSku, lmsUSDPrice)
             }
         }
 
@@ -71,6 +71,11 @@ data class EnrolledCoursesResponse(
         get() = courseModes?.firstOrNull { item ->
             EnrollmentMode.VERIFIED.name.equals(item.slug, ignoreCase = true)
         }?.storeSku
+
+    private val lmsUSDPrice: Double
+        get() = courseModes?.firstOrNull { item ->
+            EnrollmentMode.VERIFIED.name.equals(item.slug, ignoreCase = true)
+        }?.price ?: 0.0
 
     fun setStoreSku(storeProductPrefix: String) {
         courseModes?.forEach {
@@ -105,6 +110,7 @@ data class EnrolledCoursesResponse(
     data class ProductInfo(
         val courseSku: String,
         val storeSku: String,
+        val lmsUSDPrice: Double = 0.0,
     ) : Serializable
 }
 

@@ -116,7 +116,11 @@ class InAppPurchasesViewModel @Inject constructor(
 
                 productDetail?.productId == productInfo.storeSku && productDetail.oneTimePurchaseOfferDetails != null -> {
                     _productPrice.postEvent(productDetail.oneTimePurchaseOfferDetails!!)
-                    iapAnalytics.setPrice(productDetail.oneTimePurchaseOfferDetails?.formattedPrice!!)
+                    iapAnalytics.setPrice(
+                        price = productDetail.oneTimePurchaseOfferDetails?.getPriceAmount() ?: 0.0,
+                        currencyCode = productDetail.oneTimePurchaseOfferDetails?.priceCurrencyCode
+                            ?: ""
+                    )
                     iapAnalytics.trackIAPEvent(Analytics.Events.IAP_LOAD_PRICE_TIME)
                 }
 
@@ -135,7 +139,7 @@ class InAppPurchasesViewModel @Inject constructor(
 
     fun startPurchaseFlow(productInfo: ProductInfo, price: Double, currencyCode: String) {
         iapFlowData.productInfo = productInfo
-        iapFlowData.price = price
+        iapFlowData.localizedPrice = price
         iapFlowData.currencyCode = currencyCode
         iapFlowData.flowType = IAPFlowData.IAPFlowType.USER_INITIATED
         iapFlowData.isVerificationPending = true
@@ -204,7 +208,7 @@ class InAppPurchasesViewModel @Inject constructor(
             repository.executeOrder(
                 basketId = iapData.basketId,
                 purchaseToken = iapData.purchaseToken,
-                price = iapData.price,
+                price = iapData.localizedPrice,
                 currencyCode = iapData.currencyCode,
                 callback = object : NetworkResponseCallback<ExecuteOrderResponse> {
                     override fun onSuccess(result: Result.Success<ExecuteOrderResponse>) {
@@ -312,7 +316,8 @@ class InAppPurchasesViewModel @Inject constructor(
             courseId = iapFlowData.courseId,
             isSelfPaced = iapFlowData.isCourseSelfPaced,
             flowType = iapFlowData.flowType.value(),
-            screenName = iapFlowData.screenName
+            screenName = iapFlowData.screenName,
+            lmsUsdPrice = iapFlowData.productInfo.lmsUSDPrice,
         )
         iapAnalytics.trackIAPEvent(Analytics.Events.IAP_UNFULFILLED_PURCHASE_INITIATED)
 
@@ -323,7 +328,11 @@ class InAppPurchasesViewModel @Inject constructor(
             if (productDetail?.productId == iapFlowData.productInfo.storeSku) {
                 productDetail.oneTimePurchaseOfferDetails?.let {
                     iapFlowData.currencyCode = it.priceCurrencyCode
-                    iapFlowData.price = it.getPriceAmount()
+                    iapFlowData.localizedPrice = it.getPriceAmount()
+                    iapAnalytics.setPrice(
+                        price = it.getPriceAmount(),
+                        currencyCode = it.priceCurrencyCode
+                    )
                     addProductToBasket()
                 }
             }

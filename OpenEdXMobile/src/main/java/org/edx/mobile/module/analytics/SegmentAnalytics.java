@@ -958,12 +958,19 @@ public class SegmentAnalytics implements Analytics {
 
     @Override
     public void trackValuePropShowMoreLessClicked(@NonNull String courseId, @Nullable String componentId,
-                                                  @Nullable String price, boolean isSelfPaced, boolean showMore) {
+                                                  Double lmsUsdPrice, Double localizedPrice,
+                                                  @Nullable String currencyCode, boolean isSelfPaced, boolean showMore) {
         final SegmentEvent aEvent = new SegmentEvent();
         aEvent.properties.putValue(Keys.NAME, showMore ? Values.VALUE_PROP_SHOW_MORE_CLICKED : Values.VALUE_PROP_SHOW_LESS_CLICKED);
         aEvent.data.putValue(Keys.COURSE_ID, courseId);
-        if (!TextUtils.isEmpty(price)) {
-            aEvent.data.putValue(Keys.PRICE, price);
+        if (lmsUsdPrice > 0) {
+            aEvent.data.putValue(Keys.LMS_USD_PRICE, lmsUsdPrice);
+        }
+        if (localizedPrice > 0) {
+            aEvent.data.putValue(Keys.LOCALIZED_PRICE, localizedPrice);
+        }
+        if (!TextUtils.isEmpty(currencyCode)) {
+            aEvent.data.putValue(Keys.CURRENCY_CODE, currencyCode);
         }
         if (!TextUtils.isEmpty(componentId)) {
             aEvent.data.putValue(Keys.COMPONENT_ID, componentId);
@@ -1121,7 +1128,8 @@ public class SegmentAnalytics implements Analytics {
     @Override
     public void trackInAppPurchasesEvent(@NonNull String eventName, @NonNull String biValue,
                                          @Nullable String courseId, boolean isSelfPaced,
-                                         @Nullable String flowType, @Nullable String price,
+                                         @Nullable String flowType, Double lmsUsdPrice,
+                                         Double localizedPrice, @Nullable String currencyCode,
                                          @Nullable String componentId, long elapsedTime,
                                          @Nullable String error, @Nullable String actionTaken,
                                          @Nullable String screenName) {
@@ -1135,8 +1143,14 @@ public class SegmentAnalytics implements Analytics {
         if (!TextUtils.isEmpty(flowType)) {
             aEvent.data.putValue(Keys.IAP_FLOW_TYPE, flowType);
         }
-        if (!TextUtils.isEmpty(price)) {
-            aEvent.data.putValue(Keys.PRICE, price);
+        if (lmsUsdPrice > 0) {
+            aEvent.data.putValue(Keys.LMS_USD_PRICE, lmsUsdPrice);
+        }
+        if (localizedPrice > 0) {
+            aEvent.data.putValue(Keys.LOCALIZED_PRICE, localizedPrice);
+        }
+        if (!TextUtils.isEmpty(currencyCode)) {
+            aEvent.data.putValue(Keys.CURRENCY_CODE, currencyCode);
         }
         if (!TextUtils.isEmpty(componentId)) {
             aEvent.data.putValue(Keys.COMPONENT_ID, componentId);

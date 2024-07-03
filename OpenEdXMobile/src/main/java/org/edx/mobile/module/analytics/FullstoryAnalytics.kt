@@ -765,7 +765,9 @@ class FullstoryAnalytics @Inject constructor(
     override fun trackValuePropShowMoreLessClicked(
         courseId: String,
         componentId: String?,
-        price: String?,
+        lmsUsdPrice: Double,
+        localizedPrice: Double,
+        currencyCode: String?,
         isSelfPaced: Boolean,
         showMore: Boolean
     ) {
@@ -774,8 +776,14 @@ class FullstoryAnalytics @Inject constructor(
             else Values.VALUE_PROP_SHOW_LESS_CLICKED
             properties[Keys.COURSE_ID] = courseId
             properties[Keys.PACING] = if (isSelfPaced) Keys.SELF else Keys.INSTRUCTOR
-            if (price.isNotNullOrEmpty()) {
-                properties[Keys.PRICE] = price
+            if (lmsUsdPrice > 0.0) {
+                properties[Keys.LMS_USD_PRICE] = lmsUsdPrice
+            }
+            if (localizedPrice > 0.0) {
+                properties[Keys.LOCALIZED_PRICE] = localizedPrice
+            }
+            if (currencyCode.isNotNullOrEmpty()) {
+                properties[Keys.CURRENCY_CODE] = currencyCode
             }
             if (componentId.isNotNullOrEmpty()) {
                 properties[Keys.COMPONENT_ID] = componentId
@@ -963,7 +971,9 @@ class FullstoryAnalytics @Inject constructor(
         courseId: String?,
         isSelfPaced: Boolean,
         flowType: String?,
-        price: String?,
+        lmsUsdPrice: Double,
+        localizedPrice: Double,
+        currencyCode: String?,
         componentId: String?,
         elapsedTime: Long,
         error: String?,
@@ -980,8 +990,14 @@ class FullstoryAnalytics @Inject constructor(
             if (flowType.isNotNullOrEmpty()) {
                 properties[Keys.IAP_FLOW_TYPE] = flowType
             }
-            if (price.isNotNullOrEmpty()) {
-                properties[Keys.PRICE] = price
+            if (lmsUsdPrice > 0.0) {
+                properties[Keys.LMS_USD_PRICE] = lmsUsdPrice
+            }
+            if (localizedPrice > 0.0) {
+                properties[Keys.LOCALIZED_PRICE] = localizedPrice
+            }
+            if (currencyCode.isNotNullOrEmpty()) {
+                properties[Keys.CURRENCY_CODE] = currencyCode
             }
             if (componentId.isNotNullOrEmpty()) {
                 properties[Keys.COMPONENT_ID] = componentId
