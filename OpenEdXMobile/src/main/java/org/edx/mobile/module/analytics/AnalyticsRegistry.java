@@ -475,9 +475,10 @@ public class AnalyticsRegistry implements Analytics {
 
     @Override
     public void trackValuePropShowMoreLessClicked(@NonNull String courseId, @Nullable String componentId,
-                                                  @Nullable String price, boolean isSelfPaced, boolean showMore) {
+                                                  Double lmsUsdPrice, Double localizedPrice,
+                                                  @Nullable String currencyCode, boolean isSelfPaced, boolean showMore) {
         for (Analytics service : services) {
-            service.trackValuePropShowMoreLessClicked(courseId, componentId, price, isSelfPaced, showMore);
+            service.trackValuePropShowMoreLessClicked(courseId, componentId, lmsUsdPrice, localizedPrice, currencyCode, isSelfPaced, showMore);
         }
     }
 
@@ -588,13 +589,15 @@ public class AnalyticsRegistry implements Analytics {
     @Override
     public void trackInAppPurchasesEvent(@NonNull String eventName, @NonNull String biValue,
                                          @Nullable String courseId, boolean isSelfPaced,
-                                         @Nullable String flowType, @Nullable String price,
+                                         @Nullable String flowType, Double lmsUsdPrice,
+                                         Double localizedPrice, @Nullable String currencyCode,
                                          @Nullable String componentId, long elapsedTime,
                                          @Nullable String error, @Nullable String actionTaken,
                                          @Nullable String screenName) {
         for (Analytics service : services) {
-            service.trackInAppPurchasesEvent(eventName, biValue, courseId, isSelfPaced, flowType, price,
-                    componentId, elapsedTime, error, actionTaken, screenName);
+            service.trackInAppPurchasesEvent(eventName, biValue, courseId, isSelfPaced, flowType,
+                    lmsUsdPrice, localizedPrice, currencyCode, componentId, elapsedTime, error,
+                    actionTaken, screenName);
         }
     }
 }

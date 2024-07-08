@@ -51,7 +51,8 @@ class CourseUnitMobileNotSupportedFragment : CourseUnitFragment() {
     @Inject
     lateinit var iapDialog: InAppPurchasesDialog
 
-    private var price: String? = null
+    private var localizedPrice: Double = 0.0
+    private var currencyCode: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -105,7 +106,8 @@ class CourseUnitMobileNotSupportedFragment : CourseUnitFragment() {
                     isSelfPaced = isSelfPaced,
                     flowType = IAPFlowData.IAPFlowType.USER_INITIATED.value(),
                     screenName = Screens.COURSE_COMPONENT,
-                    componentId = unit.id
+                    componentId = unit.id,
+                    lmsUsdPrice = unit.productInfo?.lmsUSDPrice ?: 0.0,
                 )
                 initIAPObserver()
                 // Shimmer container taking sometime to get ready and perform the animation, so
@@ -130,7 +132,13 @@ class CourseUnitMobileNotSupportedFragment : CourseUnitFragment() {
                     }
                 )
                 environment.analyticsRegistry.trackValuePropShowMoreLessClicked(
-                    unit.courseId, unit.id, price, isSelfPaced, showMore
+                    unit.courseId,
+                    unit.id,
+                    unit.productInfo.lmsUSDPrice,
+                    localizedPrice,
+                    currencyCode,
+                    isSelfPaced,
+                    showMore
                 )
             }
         }
@@ -220,7 +228,8 @@ class CourseUnitMobileNotSupportedFragment : CourseUnitFragment() {
     }
 
     private fun setUpUpgradeButton(productDetails: ProductDetails.OneTimePurchaseOfferDetails) {
-        price = productDetails.formattedPrice
+        localizedPrice = productDetails.getPriceAmount()
+        currencyCode = productDetails.priceCurrencyCode
         binding.layoutUpgradeBtn.root.setVisibility(true)
 
         binding.layoutUpgradeBtn.btnUpgrade.text =
@@ -228,7 +237,7 @@ class CourseUnitMobileNotSupportedFragment : CourseUnitFragment() {
                 resources,
                 R.string.label_upgrade_course_button,
                 AppConstants.PRICE,
-                price
+                productDetails.formattedPrice
             ).toString()
         // The app get the product details instantly, so add some wait to perform
         // animation at least one cycle.

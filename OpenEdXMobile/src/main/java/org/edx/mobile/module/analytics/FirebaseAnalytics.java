@@ -675,12 +675,19 @@ public class FirebaseAnalytics implements Analytics {
 
     @Override
     public void trackValuePropShowMoreLessClicked(@NonNull String courseId, @Nullable String componentId,
-                                                  @Nullable String price, boolean isSelfPaced, boolean showMore) {
+                                                  Double lmsUsdPrice, Double localizedPrice,
+                                                  @Nullable String currencyCode, boolean isSelfPaced, boolean showMore) {
         final FirebaseEvent event = new FirebaseEvent(showMore ? Events.VALUE_PROP_SHOW_MORE_CLICKED : Events.VALUE_PROP_SHOW_LESS_CLICKED,
                 showMore ? Values.VALUE_PROP_SHOW_MORE_CLICKED : Values.VALUE_PROP_SHOW_LESS_CLICKED);
         event.putCourseId(courseId);
-        if (!TextUtils.isEmpty(price)) {
-            event.putString(Keys.PRICE, price);
+        if (lmsUsdPrice > 0) {
+            event.putDouble(Keys.LMS_USD_PRICE, lmsUsdPrice);
+        }
+        if (localizedPrice > 0) {
+            event.putDouble(Keys.LOCALIZED_PRICE, localizedPrice);
+        }
+        if (!TextUtils.isEmpty(currencyCode)) {
+            event.putString(Keys.CURRENCY_CODE, currencyCode);
         }
         if (!TextUtils.isEmpty(componentId)) {
             event.putString(Keys.COMPONENT_ID, componentId);
@@ -828,7 +835,8 @@ public class FirebaseAnalytics implements Analytics {
     @Override
     public void trackInAppPurchasesEvent(@NonNull String eventName, @NonNull String biValue,
                                          @Nullable String courseId, boolean isSelfPaced,
-                                         @Nullable String flowType, @Nullable String price,
+                                         @Nullable String flowType, Double lmsUsdPrice,
+                                         Double localizedPrice, @Nullable String currencyCode,
                                          @Nullable String componentId, long elapsedTime,
                                          @Nullable String error, @Nullable String actionTaken,
                                          @Nullable String screenName) {
@@ -841,8 +849,14 @@ public class FirebaseAnalytics implements Analytics {
         if (!TextUtils.isEmpty(flowType)) {
             event.putString(Keys.IAP_FLOW_TYPE, flowType);
         }
-        if (!TextUtils.isEmpty(price)) {
-            event.putString(Keys.PRICE, price);
+        if (lmsUsdPrice > 0) {
+            event.putDouble(Keys.LMS_USD_PRICE, lmsUsdPrice);
+        }
+        if (localizedPrice > 0) {
+            event.putDouble(Keys.LOCALIZED_PRICE, localizedPrice);
+        }
+        if (!TextUtils.isEmpty(currencyCode)) {
+            event.putString(Keys.CURRENCY_CODE, currencyCode);
         }
         if (!TextUtils.isEmpty(componentId)) {
             event.putString(Keys.COMPONENT_ID, componentId);

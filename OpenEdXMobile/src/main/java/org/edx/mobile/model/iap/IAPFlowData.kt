@@ -7,10 +7,10 @@ data class IAPFlowData(
     var flowType: IAPFlowType = IAPFlowType.USER_INITIATED,
     var courseId: String = "",
     var isCourseSelfPaced: Boolean = false,
-    var productInfo: ProductInfo = ProductInfo("", ""),
+    var productInfo: ProductInfo = ProductInfo("", "", 0.0),
     var basketId: Long = 0,
     var purchaseToken: String = "",
-    var price: Double = 0.0,
+    var localizedPrice: Double = 0.0,
     var currencyCode: String = "",
     var screenName: String = "",
     var isVerificationPending: Boolean = false
@@ -18,9 +18,9 @@ data class IAPFlowData(
     fun clear() {
         courseId = ""
         isCourseSelfPaced = false
-        productInfo = ProductInfo("", "")
+        productInfo = ProductInfo("", "", 0.0)
         basketId = 0
-        price = 0.0
+        localizedPrice = 0.0
         currencyCode = ""
         purchaseToken = ""
         isVerificationPending = false

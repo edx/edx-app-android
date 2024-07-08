@@ -114,6 +114,7 @@ class CourseModalDialogFragment : DialogFragment() {
         iapAnalytics.initCourseValues(
             courseId = courseId,
             isSelfPaced = isSelfPaced,
+            lmsUsdPrice = productInfo?.lmsUSDPrice ?: 0.0,
             flowType = IAPFlowData.IAPFlowType.USER_INITIATED.value(),
             screenName = screenName
         )

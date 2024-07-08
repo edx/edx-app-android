@@ -483,14 +483,18 @@ public interface Analytics {
     /**
      * Track the tapped occurrence when a user taps "Show more/Show less" in an embedded value prop.
      *
-     * @param courseId    course id of the course on which button is tapped
-     * @param componentId Component id of course unit
-     * @param price       Price for which the course can upgrade
-     * @param isSelfPaced Whether the course is self-paced or instructor paced
-     * @param showMore    True when user tapped on show more otherwise false
+     * @param courseId       course id of the course on which button is tapped
+     * @param componentId    Component id of course unit
+     * @param lmsUsdPrice    price of the course from lms server is USD
+     * @param localizedPrice price of the course from Billing server in localised currency to buy
+     * @param currencyCode   currency code of the localised price
+     * @param isSelfPaced    Whether the course is self-paced or instructor paced
+     * @param showMore       True when user tapped on show more otherwise false
      */
     void trackValuePropShowMoreLessClicked(@NonNull String courseId, @Nullable String componentId,
-                                           @Nullable String price, boolean isSelfPaced, boolean showMore);
+                                           Double lmsUsdPrice, Double localizedPrice,
+                                           @Nullable String currencyCode,
+                                           boolean isSelfPaced, boolean showMore);
 
     /**
      * Tracks explore all courses tapped on landing screen.
@@ -617,20 +621,23 @@ public interface Analytics {
     /**
      * Track the In App Purchases events
      *
-     * @param eventName   Name of the event
-     * @param biValue     BiValue of the event
-     * @param courseId    Id of the course
-     * @param isSelfPaced Whether the course is self-paced or instructor paced
-     * @param price       price of the course to buy
-     * @param componentId Component id of course unit
-     * @param elapsedTime time in milliseconds that app took to perform the action(price load, refresh course content)
-     * @param error       error that app sending in get help email
-     * @param actionTaken action taken on the dialog
-     * @param screenName  Screen name on which event is triggered
+     * @param eventName      Name of the event
+     * @param biValue        BiValue of the event
+     * @param courseId       Id of the course
+     * @param isSelfPaced    Whether the course is self-paced or instructor paced
+     * @param lmsUsdPrice    price of the course from lms server is USD
+     * @param localizedPrice price of the course from Billing server in localised currency to buy
+     * @param currencyCode   currency code of the localised price
+     * @param componentId    Component id of course unit
+     * @param elapsedTime    time in milliseconds that app took to perform the action(price load, refresh course content)
+     * @param error          error that app sending in get help email
+     * @param actionTaken    action taken on the dialog
+     * @param screenName     Screen name on which event is triggered
      */
     void trackInAppPurchasesEvent(@NonNull String eventName, @NonNull String biValue,
                                   @Nullable String courseId, boolean isSelfPaced,
-                                  @Nullable String flowType, @Nullable String price,
+                                  @Nullable String flowType, Double lmsUsdPrice,
+                                  Double localizedPrice, @Nullable String currencyCode,
                                   @Nullable String componentId, long elapsedTime,
                                   @Nullable String error, @Nullable String actionTaken,
                                   @Nullable String screenName);
@@ -683,7 +690,6 @@ public interface Analytics {
         String SCREEN_NAME = "screen_name";
         String BANNER_TYPE = "banner_type";
         String SUCCESS = "success";
-        String PRICE = "price";
         String PAYMENT_ENABLED = "payment_enabled";
         String IAP_EXPERIMENT_GROUP = "iap_experiment_group";
         String IAP_FLOW_TYPE = "flow_type";
@@ -731,6 +737,9 @@ public interface Analytics {
         String ERROR = "error";
         String ERROR_ACTION = "error_action";
         String ENROLLED_COURSES_COUNT = "enrolled_courses_count";
+        String LMS_USD_PRICE = "lms_usd_price";
+        String LOCALIZED_PRICE = "localized_price";
+        String CURRENCY_CODE = "localized_currency_code";
     }
 
     interface Values {
