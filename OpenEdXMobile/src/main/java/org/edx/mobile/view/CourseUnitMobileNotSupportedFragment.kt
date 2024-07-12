@@ -51,6 +51,7 @@ class CourseUnitMobileNotSupportedFragment : CourseUnitFragment() {
     @Inject
     lateinit var iapDialog: InAppPurchasesDialog
 
+    private var lmsUSDPrice: Double = 0.0
     private var localizedPrice: Double = 0.0
     private var currencyCode: String = ""
 
@@ -134,7 +135,7 @@ class CourseUnitMobileNotSupportedFragment : CourseUnitFragment() {
                 environment.analyticsRegistry.trackValuePropShowMoreLessClicked(
                     unit.courseId,
                     unit.id,
-                    unit.productInfo.lmsUSDPrice,
+                    lmsUSDPrice,
                     localizedPrice,
                     currencyCode,
                     isSelfPaced,
@@ -228,6 +229,7 @@ class CourseUnitMobileNotSupportedFragment : CourseUnitFragment() {
     }
 
     private fun setUpUpgradeButton(productDetails: ProductDetails.OneTimePurchaseOfferDetails) {
+        lmsUSDPrice = unit?.productInfo?.lmsUSDPrice ?: 0.0
         localizedPrice = productDetails.getPriceAmount()
         currencyCode = productDetails.priceCurrencyCode
         binding.layoutUpgradeBtn.root.setVisibility(true)
