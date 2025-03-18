@@ -40,7 +40,7 @@ jobs:
       - name: Upload Test Report
         # Run this step even if the previous fails
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: Unit Test Report
           path: artifacts
@@ -135,7 +135,7 @@ jobs:
       # Uploads the folder or file in path to GitHub
       - name: Upload Test Report
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: Screenshot Test Report
           path: artifacts
