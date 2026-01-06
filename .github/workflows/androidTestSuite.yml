@@ -11,7 +11,7 @@ on:
 jobs:
   android_test_cases:
     name: Android Unit Tests
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
       # Checkouts the current branch for processing
